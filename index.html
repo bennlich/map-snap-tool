@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <script type="text/javascript" src="leaflet/leaflet.js"></script>
+  <script type="text/javascript" src="leaflet-image.js"></script>
+  <script type="text/javascript" src="saveAs.js"></script>
+  <link rel="stylesheet" type="text/css" href="leaflet/leaflet.css">
+</head>
+<body>
+  <div id="map"></div>
+  <div class="controls">
+    <div>
+      <input id="address-input" style="width: 600px" type="text" onkeydown="onEnterSetAddress(event)" placeholder="Address">
+      <button onclick="setAddress()">Search</button>
+    </div>
+    <div>
+      <input id="filename" style="width: 300px" type="text" placeholder="Filename">
+      <button onclick="downloadImage()">Download image</button>
+    </div>
+  </div>
+  <div id="images"></div>
+  <div id="errors"></div>
+  <canvas id="test-canvas"></canvas>
+  <script type="text/javascript" src="main.js"></script>
+</body>
+</html>

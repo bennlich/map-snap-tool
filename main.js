@@ -1,0 +1,91 @@
+let errorsEl = document.querySelector('#errors');
+let mapEl = document.querySelector('#map');
+mapEl.style.width = "600px";
+mapEl.style.height = "300px";
+
+
+let stamenUrl = 'http://tile.stamen.com/terrain/{z}/{x}/{y}.jpg';
+let osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+let hotUrl = 'https://tile-{s}.openstreetmap.fr/hot/{z}/{x}/{y}.png';
+let brightUrl = 'https://api.maptiler.com/maps/bright/{z}/{x}/{y}.png?key=s8WieCgbIwXrAB6k3bm7';
+let basicUrl = 'https://api.maptiler.com/maps/basic/{z}/{x}/{y}.png?key=s8WieCgbIwXrAB6k3bm7';
+
+let stamenLayer = L.tileLayer(stamenUrl);
+let osmLayer = L.tileLayer(osmUrl);
+let hotLayer = L.tileLayer(hotUrl);
+let brightLayer = L.tileLayer(brightUrl);
+let basicLayer = L.tileLayer(basicUrl);
+
+let layers = [
+  stamenLayer, osmLayer, hotLayer, brightLayer, basicLayer
+];
+
+var map = L.map('map', { layers }).setView({ lat: 37.96152331396614, lng: -118.47656250000001 }, 5);
+
+L.control.layers({
+  "Stamen": stamenLayer,
+  "OSM": osmLayer,
+  "Humanitarian": hotLayer,
+  "Bright": brightLayer,
+  "Basic": basicLayer
+}).addTo(map);
+
+let marker = L.marker([51.5, -0.09]).addTo(map);
+
+function setMessage(message) {
+  errorsEl.innerText = message;
+}
+
+function onEnterSetAddress(event) {
+  if (event.key === 'Enter') {
+    setAddress();
+  }
+}
+
+function setAddress() {
+  let zoom = 16;
+  let query = document.querySelector('#address-input').value;
+  let geocodeUrl = `https://nominatim.openstreetmap.org/search?q=${query}&format=json&limit=1`;
+  fetch(geocodeUrl)
+    .then((response) => response.json())
+    .then((results) => {
+      if (results.length === 0) {
+        setMessage("No results found :( Check address spelling. This API is finicky.")
+        return;
+      }
+
+      let {lat, lon} = results[0];
+      map.setView([lat, lon], zoom);
+      marker.setLatLng([lat, lon]);
+    })
+    .catch((error) => setMessage(error));
+}
+
+function drawAttribution(canvas) {
+  let ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#ddd';
+  ctx.fillRect(0, canvas.height - 18, canvas.width, 18);
+
+  ctx.textAlign = 'right';
+  ctx.font = '10px monospace';
+  ctx.fillStyle = 'black';
+  ctx.fillText(osmAttributionText, canvas.width - 5, canvas.height - 5);
+}
+
+function downloadImage() {
+  let filenameEl = document.querySelector('#filename');
+  setMessage("This can take several seconds");
+  leafletImage(map, function(err, canvas) {
+    setMessage("");
+    // drawAttribution(canvas);
+    window.saveAs(canvas.toDataURL(), filenameEl.value);
+  });
+}
+
+// useful for debugging the attribution on the downloaded image
+// let testCanvas = document.querySelector('#test-canvas');
+// testCanvas.setAttribute('width', 600);
+// testCanvas.setAttribute('height', 300);
+// drawAttribution(testCanvas);
+
+
