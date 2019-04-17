@@ -54,7 +54,8 @@ function setAddress() {
         return;
       }
 
-      let {lat, lon} = results[0];
+      let {lat, lon, display_name} = results[0];
+      setMessage(`Found result: ${display_name}`);
       map.setView([lat, lon], zoom);
       marker.setLatLng([lat, lon]);
     })
