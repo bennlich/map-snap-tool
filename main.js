@@ -3,6 +3,9 @@ let mapEl = document.querySelector('#map');
 mapEl.style.width = "600px";
 mapEl.style.height = "300px";
 
+let googleMapEl = document.querySelector('#google-map');
+googleMapEl.style.width = "600px";
+googleMapEl.style.height = "300px";
 
 let stamenUrl = 'http://tile.stamen.com/terrain/{z}/{x}/{y}.jpg';
 let osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
@@ -20,7 +23,16 @@ let layers = [
   stamenLayer, osmLayer, hotLayer, brightLayer, basicLayer
 ];
 
-var map = L.map('map', { layers }).setView({ lat: 37.96152331396614, lng: -118.47656250000001 }, 5);
+let startCoord = { lat: 37.96152331396614, lng: -118.47656250000001 };
+let startZoom = 5;
+let map = L.map('map', { layers }).setView(startCoord, startZoom);
+
+let googleMap;
+let googleMarker;
+function initMap() {
+  googleMap = new google.maps.Map(googleMapEl, { center: startCoord, zoom: startZoom });
+  googleMarker = new google.maps.Marker({ map: googleMap });
+}
 
 L.control.layers({
   "Stamen": stamenLayer,
@@ -31,6 +43,7 @@ L.control.layers({
 }).addTo(map);
 
 let marker = L.marker([51.5, -0.09]).addTo(map);
+
 
 function setMessage(message) {
   errorsEl.innerText = message;
@@ -58,6 +71,8 @@ function setAddress() {
       let {lat, lng} = results.results[0].geometry.location;
       map.setView([lat, lng], zoom);
       marker.setLatLng([lat, lng]);
+      googleMap.setOptions({ center: { lat, lng }, zoom });
+      googleMarker.setPosition({ lat, lng });
     })
     .catch((error) => setMessage(error));
 }

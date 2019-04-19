@@ -9,6 +9,7 @@
   <link rel="stylesheet" type="text/css" href="leaflet/leaflet.css">
 </head>
 <body>
+  <div id="google-map"></div>
   <div id="map"></div>
   <div class="controls">
     <div>
@@ -24,5 +25,7 @@
   <div id="errors"></div>
   <canvas id="test-canvas"></canvas>
   <script type="text/javascript" src="main.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDKm0QF55mheqU3guJUCnmVzk9LOmcQbaY&callback=initMap"
+    async defer></script>
 </body>
 </html>
