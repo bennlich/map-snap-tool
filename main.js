@@ -24,10 +24,10 @@ var map = L.map('map', { layers }).setView({ lat: 37.96152331396614, lng: -118.4
 
 L.control.layers({
   "Stamen": stamenLayer,
-  "OSM": osmLayer,
   "Humanitarian": hotLayer,
   "Bright": brightLayer,
-  "Basic": basicLayer
+  "Basic": basicLayer,
+  "OSM": osmLayer
 }).addTo(map);
 
 let marker = L.marker([51.5, -0.09]).addTo(map);
