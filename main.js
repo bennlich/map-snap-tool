@@ -45,21 +45,32 @@ function onEnterSetAddress(event) {
 function setAddress() {
   let zoom = 16;
   let query = document.querySelector('#address-input').value;
-  let geocodeUrl = `https://nominatim.openstreetmap.org/search?q=${query}&format=json&limit=1`;
+  // let geocodeUrl = `https://nominatim.openstreetmap.org/search?q=${query}&format=json&limit=1`;
+  let geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${query}&key=AIzaSyDKm0QF55mheqU3guJUCnmVzk9LOmcQbaY`;
   fetch(geocodeUrl)
     .then((response) => response.json())
     .then((results) => {
-      if (results.length === 0) {
-        setMessage("No results found :( Check address spelling. This API is finicky.")
+      if (!results.status === 'OK') {
+        setMessage(`Error: ${JSON.stringify(results)}`)
         return;
       }
-
-      let {lat, lon, display_name} = results[0];
-      setMessage(`Found result: ${display_name}`);
-      map.setView([lat, lon], zoom);
-      marker.setLatLng([lat, lon]);
+      
+      let {lat, lng} = results.results[0].geometry.location;
+      map.setView([lat, lng], zoom);
+      marker.setLatLng([lat, lng]);
     })
     .catch((error) => setMessage(error));
+}
+
+function parseNominatimResults(results) {
+  if (results.length === 0) {
+    setMessage("No results found :( Check address spelling. This API is finicky.")
+    return;
+  }
+  let {lat, lon, display_name} = results[0];
+  setMessage(`Found result: ${display_name}`);
+  map.setView([lat, lon], zoom);
+  marker.setLatLng([lat, lon]);
 }
 
 function drawAttribution(canvas) {
