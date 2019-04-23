@@ -20,7 +20,7 @@ let brightLayer = L.tileLayer(brightUrl);
 let basicLayer = L.tileLayer(basicUrl);
 
 let layers = [
-  stamenLayer, osmLayer, hotLayer, brightLayer, basicLayer
+  osmLayer
 ];
 
 let startCoord = { lat: 37.96152331396614, lng: -118.47656250000001 };
@@ -34,13 +34,13 @@ function initMap() {
   googleMarker = new google.maps.Marker({ map: googleMap });
 }
 
-L.control.layers({
-  "Stamen": stamenLayer,
-  "Humanitarian": hotLayer,
-  "Bright": brightLayer,
-  "Basic": basicLayer,
-  "OSM": osmLayer
-}).addTo(map);
+// L.control.layers({
+//   "Stamen": stamenLayer,
+//   "Humanitarian": hotLayer,
+//   "Bright": brightLayer,
+//   "Basic": basicLayer,
+//   "OSM": osmLayer
+// }).addTo(map);
 
 let marker = L.marker([51.5, -0.09]).addTo(map);
 
