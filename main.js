@@ -7,6 +7,10 @@ let googleMapEl = document.querySelector('#google-map');
 googleMapEl.style.width = "600px";
 googleMapEl.style.height = "300px";
 
+let contextMapEl = document.querySelector('#context-map');
+contextMapEl.style.width = "200px";
+contextMapEl.style.height = "600px";
+
 let stamenUrl = 'http://tile.stamen.com/terrain/{z}/{x}/{y}.jpg';
 let osmUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 let hotUrl = 'https://tile-{s}.openstreetmap.fr/hot/{z}/{x}/{y}.png';
@@ -29,9 +33,15 @@ let map = L.map('map', { layers }).setView(startCoord, startZoom);
 
 let googleMap;
 let googleMarker;
+
+let contextMap;
+let contextMarker;
 function initMap() {
   googleMap = new google.maps.Map(googleMapEl, { center: startCoord, zoom: startZoom });
   googleMarker = new google.maps.Marker({ map: googleMap });
+
+  contextMap = new google.maps.Map(contextMapEl, { center: { lat: 38.71980474264237, lng: -118.6083984375 }, zoom: 4 });
+  contextMarker = new google.maps.Marker({ map: contextMap });
 }
 
 // L.control.layers({
@@ -73,6 +83,7 @@ function setAddress() {
       marker.setLatLng([lat, lng]);
       googleMap.setOptions({ center: { lat, lng }, zoom });
       googleMarker.setPosition({ lat, lng });
+      contextMarker.setPosition({ lat, lng });
     })
     .catch((error) => setMessage(error));
 }
